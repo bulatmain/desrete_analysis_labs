@@ -1,4 +1,4 @@
-#include "../include/rb_tree.hpp"
+#include <rb_tree.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -39,10 +39,8 @@ std::ostream& operator<<(std::ostream& os, var& v) {
 int main() {   
     RBTree<var> tree;
 
-    int k = 1;
     std::string word;
     while (std::cin >> word) {
-        // std::cout << k++ << " ";
         if (word == "+") {
             var v; std::cin >> v;
             try {
