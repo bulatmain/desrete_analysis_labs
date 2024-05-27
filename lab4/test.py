@@ -3,7 +3,7 @@ import os
 from functools import cmp_to_key
 
 PATTERN_SIZE = 5
-OCCURENCE_COUNT = 10
+OCCURENCE_COUNT = 4
 OCCURENCE_RATE = 0.3
 LINES_COUNT = 5
 

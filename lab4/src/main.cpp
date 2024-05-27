@@ -1,12 +1,15 @@
 // #include <kmp_algo.hpp>
 
 #include <algorithm>
+#include <cinttypes>
 #include <iostream>
 #include <sstream>
 #include <vector>
 #include <tuple>
 
-using intType = size_t;
+#include <kmp.hpp>
+
+using intType = uint32_t;
 
 template <class T>
 std::ostream& operator<<(std::ostream& os, std::vector<T> const& v) {
@@ -77,40 +80,18 @@ std::vector<intType> summirize(std::vector<intType> const& v) {
     return summirized;
 }
 
-std::tuple<size_t, size_t> getLineAndWord(
-    std::vector<intType>::const_iterator const& next,
-    std::vector<intType>::const_iterator const& begin,
-    std::vector<intType> const& wordsTillLine
-    ) {
+std::tuple<size_t, size_t> getLineAndWordFromOccurence(size_t occurence, std::vector<intType> const& wordsTillLine) {
     size_t line, word;
-    auto distance = static_cast<size_t>(std::distance(begin, next));
-    auto lineIt = std::upper_bound(wordsTillLine.begin(), wordsTillLine.end(), distance);
+    auto lineIt = std::upper_bound(wordsTillLine.begin(), wordsTillLine.end(), occurence);
     lineIt--;
 
     line = static_cast<size_t>(std::distance(
         wordsTillLine.cbegin(),
         lineIt
     ));
-    word = distance - static_cast<size_t>(wordsTillLine[line]);
+    word = occurence - static_cast<size_t>(wordsTillLine[line]);
 
     return std::make_tuple(line + 1, word + 1);
-}
-
-using NoNextPattern = std::runtime_error;
-
-std::tuple<size_t, size_t> findNextPatternFrom(
-    std::vector<intType>::const_iterator& begin,
-    std::vector<intType> const& text,
-    std::vector<intType> const& pattern,
-    std::vector<intType> const& wordsTillLine
-    ) {
-        auto const next = std::search(begin, text.end(), pattern.begin(), pattern.end());
-        if (next == text.end()) {
-            begin = text.end();
-            throw NoNextPattern("No next pattern found");
-        }
-        begin = next + 1;
-        return getLineAndWord(next, text.cbegin(), wordsTillLine);
 }
 
 int main() {   
@@ -118,22 +99,22 @@ int main() {
 
     readPattern(pattern);
 
-    std::vector<intType> text, wordsInLines;
+    std::vector<intType> text;
+    std::vector<intType> wordsInLines;
 
     readText(text, wordsInLines);
 
     auto wordsTillLine = summirize(wordsInLines);
 
-    auto begin = text.cbegin();
+    cust::KnuthMorrisPrattAlgorithm<intType> kmp(pattern, text);
+
+    auto occurences = kmp.findAllOccurences();
 
     size_t line, word;
-    while (begin != text.end()) {
-        try {
-            std::tie(line, word) = findNextPatternFrom(begin, text, pattern, wordsTillLine);
-            std::cout << line << ", " << word << std::endl;
-        } catch (NoNextPattern const& e) {
-            break;
-        }
+    for (auto const& occurence : occurences) {
+        // line = 1, word = occurence + 1;
+        std::tie(line, word) = getLineAndWordFromOccurence(occurence, wordsTillLine);
+        std::cout << line << ", " << word << std::endl;
     }
 
     return 0;

@@ -41,8 +41,8 @@ if(NOT CMAKE_CXX_EXTENSIONS)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
-# include(cmake/kmp_algo.cmake)
+include(cmake/kmp_algo.cmake)
 
 add_executable(exec src/main.cpp)
-# target_link_libraries(exec PRIVATE rbtree::headers)
+target_link_libraries(exec PRIVATE kmp::headers)
 
