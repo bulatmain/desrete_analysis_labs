@@ -71,13 +71,13 @@ void readText(std::vector<intType>& text, std::vector<intType>& wordsInLines) {
     }
 }
 
-std::vector<intType> summirize(std::vector<intType> const& v) {
-    std::vector<intType> summirized = {0};
-    summirized.insert(summirized.end(), v.begin(), v.end());
-    for (size_t i = 1; i < summirized.size(); ++i) {
-        summirized[i] += summirized[i - 1];
+std::vector<intType> summarize(std::vector<intType> const& v) {
+    std::vector<intType> summarized = {0};
+    summarized.insert(summarized.end(), v.begin(), v.end());
+    for (size_t i = 1; i < summarized.size(); ++i) {
+        summarized[i] += summarized[i - 1];
     }
-    return summirized;
+    return summarized;
 }
 
 std::tuple<size_t, size_t> getLineAndWordFromOccurence(size_t occurence, std::vector<intType> const& wordsTillLine) {
@@ -104,7 +104,7 @@ int main() {
 
     readText(text, wordsInLines);
 
-    auto wordsTillLine = summirize(wordsInLines);
+    auto wordsTillLine = summarize(wordsInLines);
 
     cust::KnuthMorrisPrattAlgorithm<intType> kmp(pattern, text);
 
