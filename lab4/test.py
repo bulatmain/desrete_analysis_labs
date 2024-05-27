@@ -51,6 +51,9 @@ def readResultFromFile(resultFilename):
 def checkResult(resultFilename, wanted):
     result = readResultFromFile(resultFilename)
     leastSize = min(len(result), len(wanted))
+    if (len(result) != len(wanted)):
+        print(f"Output length mismatch: result size: \
+               {len(result)}, wanted size: {len(wanted)}")
 
     fucked: bool = False
     for i in range(leastSize):
@@ -68,7 +71,6 @@ testConfig = TestConfig(
 )
 
 alphabet = AlphabetUINT64()
-
 
 linedPatternPositions = genTestFile(testConfig, alphabet)
 runExecByTest(EXEC_PATH, TEST_FILENAME, RESULT_FILENAME)
